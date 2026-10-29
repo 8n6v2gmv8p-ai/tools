@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Lüftungsrechner</title>
+<style>
+  :root {
+    --bg: #e9eeea;
+    --card: #ffffff;
+    --text: #1c2420;
+    --muted: #5d6b63;
+    --line: #cfd8d2;
+    --accent: #2f7a5b;
+    --accent-text: #ffffff;
+    --good: #2f7a5b;
+    --warn: #b4571b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121715;
+      --card: #1c231f;
+      --text: #eef3f0;
+      --muted: #9aaaa1;
+      --line: #2d3832;
+      --accent: #5fb98f;
+      --accent-text: #0b1a13;
+      --good: #6fcb9f;
+      --warn: #e8935a;
+    }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { background: var(--bg); }
+  body {
+    margin: 0 auto;
+    max-width: 480px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, system-ui, sans-serif;
+    padding: calc(env(safe-area-inset-top, 0px) + 16px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  h1 { font-size: 1.5rem; margin: 4px 4px 0; font-weight: 650; }
+  .card { background: var(--card); border-radius: 20px; padding: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .group-title { font-weight: 600; margin: 0 0 10px; }
+  label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
+  .field { position: relative; }
+  input[type=number] {
+    width: 100%;
+    font: inherit;
+    font-size: 1.25rem;
+    color: var(--text);
+    background: transparent;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 40px 10px 12px;
+    -moz-appearance: textfield;
+  }
+  input[type=number]:focus { outline: 3px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+  .unit { position: absolute; right: 12px; bottom: 11px; color: var(--muted); pointer-events: none; }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label {
+    margin: 0; text-align: center; padding: 11px 4px; font-size: .95rem;
+    color: var(--text); border: 1.5px solid var(--line); border-radius: 12px;
+  }
+  .seg input:checked + label { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+  .seg input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .status { font-weight: 650; margin: 0 0 4px; }
+  .status.good { color: var(--good); }
+  .status.warn { color: var(--warn); }
+  .minutes { font-size: 3.4rem; font-weight: 300; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .minutes small { font-size: 1.2rem; color: var(--muted); margin-left: 6px; }
+  .note { color: var(--muted); font-size: .92rem; margin: 8px 0 0; line-height: 1.4; }
+  dl { margin: 12px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: .95rem; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .foot { color: var(--muted); font-size: .8rem; margin: 0 4px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <h1>Lüftungsrechner</h1>
+
+  <section class="card">
+    <p class="group-title">Raum</p>
+    <div class="grid">
+      <div class="field">
+        <label for="ti">Temperatur</label>
+        <input id="ti" type="number" inputmode="decimal" step="0.1" value="21">
+        <span class="unit">°C</span>
+      </div>
+      <div class="field">
+        <label for="hi">Luftfeuchte</label>
+        <input id="hi" type="number" inputmode="decimal" step="1" min="0" max="100" value="60">
+        <span class="unit">%</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <p class="group-title">Draußen</p>
+    <div class="grid">
+      <div class="field">
+        <label for="to">Temperatur</label>
+        <input id="to" type="number" inputmode="decimal" step="0.1" value="5">
+        <span class="unit">°C</span>
+      </div>
+      <div class="field">
+        <label for="ho">Luftfeuchte</label>
+        <input id="ho" type="number" inputmode="decimal" step="1" min="0" max="100" value="80">
+        <span class="unit">%</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <p class="group-title">Lüftungsart</p>
+    <div class="seg" role="radiogroup" aria-label="Lüftungsart">
+      <input type="radio" name="art" id="a1" value="1" checked><label for="a1">Stoßlüften</label>
+      <input type="radio" name="art" id="a2" value="0.5"><label for="a2">Querlüften</label>
+      <input type="radio" name="art" id="a3" value="5"><label for="a3">Gekippt</label>
+    </div>
+  </section>
+
+  <section class="card" aria-live="polite">
+    <p class="status" id="status"></p>
+    <div class="minutes" id="minutes"></div>
+    <p class="note" id="note"></p>
+    <dl id="details"></dl>
+  </section>
+
+  <p class="foot">Richtwerte für ein typisches Zimmer. Wind, Raumgröße und Fenstergröße ändern die Dauer.
+  Gerechnet wird mit der absoluten Luftfeuchte (Wassergehalt der Luft).</p>
+
+<script>
+  var ANCHORS = [[0, 45], [2, 30], [5, 20], [7, 15], [10, 10], [15, 6], [20, 4], [25, 3]];
+
+  function num(id) { return parseFloat(document.getElementById(id).value); }
+
+  // Absolute Luftfeuchte in g/m³ (Magnus-Formel)
+  function sat(t) { return 6.112 * Math.exp(17.62 * t / (243.12 + t)); }
+  function absHum(t, rh) { return 216.7 * (rh / 100 * sat(t)) / (273.15 + t); }
+
+  function baseMinutes(dT) {
+    if (dT >= 25) return 3;
+    for (var i = 1; i < ANCHORS.length; i++) {
+      if (dT <= ANCHORS[i][0]) {
+        var a = ANCHORS[i - 1], b = ANCHORS[i];
+        return a[1] + (b[1] - a[1]) * (dT - a[0]) / (b[0] - a[0]);
+      }
+    }
+    return 3;
+  }
+  function f1(x) { return x.toFixed(1).replace(".", ","); }
+
+  function render() {
+    var ti = num("ti"), hi = num("hi"), to = num("to"), ho = num("ho");
+    var st = document.getElementById("status");
+    var mi = document.getElementById("minutes");
+    var nt = document.getElementById("note");
+    var dl = document.getElementById("details");
+    if ([ti, hi, to, ho].some(isNaN) || hi < 0 || hi > 100 || ho < 0 || ho > 100) {
+      st.textContent = "Bitte alle Felder ausfüllen";
+      st.className = "status warn";
+      mi.textContent = "–"; nt.textContent = "Luftfeuchte liegt zwischen 0 und 100 %."; dl.innerHTML = "";
+      return;
+    }
+    var factor = parseFloat(document.querySelector("input[name=art]:checked").value);
+    var dT = Math.abs(ti - to);
+    var mins = baseMinutes(dT) * factor;
+    mins = mins < 10 ? Math.round(mins) : Math.round(mins / (mins > 30 ? 5 : 1)) * (mins > 30 ? 5 : 1);
+    if (mins < 2) mins = 2;
+
+    var aIn = absHum(ti, hi), aOut = absHum(to, ho);
+    var rhAfter = Math.min(100, aOut / sat(ti) * 216.7 / (273.15 + ti) * 100);
+    // rF der Außenluft nach Erwärmung/Abkühlung auf Raumtemperatur
+    rhAfter = Math.min(100, (aOut * (273.15 + ti) / 216.7) / sat(ti) * 100);
+    var diff = aIn - aOut;
+
+    var notes = [];
+    var good = diff > 0.3;
+    if (good) {
+      st.textContent = "Lüften lohnt sich";
+      notes.push("Die Außenluft ist trockener als die Raumluft.");
+    } else {
+      st.textContent = "Lüften entfeuchtet nicht";
+      notes.push("Die Außenluft enthält gleich viel oder mehr Wasser als die Raumluft. Frische Luft bekommst du trotzdem, die Feuchte sinkt aber nicht.");
+    }
+    st.className = "status " + (good ? "good" : "warn");
+
+    if (to > ti) notes.push("Draußen ist es wärmer: Lüften heizt den Raum auf. Besser morgens oder abends lüften.");
+    if (factor === 5) notes.push("Gekippte Fenster kühlen Wände aus und lüften schlecht. Stoß- oder Querlüften ist wirksamer.");
+    if (good && rhAfter > 65) notes.push("Nach dem Lüften bleibt der Raum voraussichtlich noch recht feucht.");
+
+    mi.innerHTML = (dT < 1 && factor !== 5 ? "ca. " : "ca. ") + mins + "<small>Minuten</small>";
+    nt.textContent = notes.join(" ");
+    dl.innerHTML =
+      "<dt>Temperaturunterschied</dt><dd>" + f1(dT) + " °C</dd>" +
+      "<dt>Wassergehalt Raumluft</dt><dd>" + f1(aIn) + " g/m³</dd>" +
+      "<dt>Wassergehalt Außenluft</dt><dd>" + f1(aOut) + " g/m³</dd>" +
+      "<dt>Raum nach vollem Luftaustausch</dt><dd>ca. " + Math.round(rhAfter) + " % rF</dd>";
+  }
+
+  document.addEventListener("input", render);
+  render();
+</script>
+</body>
+</html>
