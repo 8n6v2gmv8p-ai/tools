@@ -4,219 +4,123 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#2f7a5b">
 <title>Lüftungsrechner</title>
 <style>
   :root {
-    --bg: #f2f5f3;
-    --card: #ffffff;
-    --text: #1c2420;
-    --muted: #5f7067;
-    --line: #d8e0db;
-    --track-bg: #e2e8e4;
-    --accent: #2f7a5b;
-    --accent-light: #e7f3ed;
-    --accent-text: #ffffff;
-    --good: #25704f;
-    --good-bg: #eaf6ef;
-    --warn: #b4571b;
-    --warn-bg: #fcf1e8;
-    --radius-lg: 20px;
-    --radius-md: 14px;
-    --radius-sm: 8px;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --bg: #0b0f12;
+    --card: #141920;
+    --card-border: #1e2630;
+    --text: #e6edf3;
+    --muted: #808c98;
+    --line: #222b35;
+    --accent: #2dd4bf;
+    --accent-text: #051b18;
+    --slider-track: #202832;
+    --good: #34d399;
+    --warn: #fb923c;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #121715;
-      --card: #1c231f;
-      --text: #eef3f0;
-      --muted: #9aaaa1;
-      --line: #2d3832;
-      --track-bg: #29342e;
-      --accent: #5fb98f;
-      --accent-light: #183327;
-      --accent-text: #0b1a13;
-      --good: #6fcb9f;
-      --good-bg: #153123;
-      --warn: #e8935a;
-      --warn-bg: #351f14;
-      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html {
-    background: var(--bg);
-  }
-
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { background: var(--bg); }
   body {
     margin: 0 auto;
-    max-width: 520px;
+    max-width: 480px;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px calc(env(safe-area-inset-bottom, 0px) + 28px);
+    padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    min-height: 100vh;
-  }
-
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 4px;
+    gap: 14px;
   }
 
   h1 {
-    font-size: 1.55rem;
-    margin: 0;
-    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 4px 0 2px;
+    font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--text);
   }
 
-  .badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    background: var(--accent-light);
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
   .card {
     background: var(--card);
-    border-radius: var(--radius-lg);
-    padding: 18px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--line);
-    transition: border-color 0.2s ease;
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 16px;
   }
 
   .group-title {
-    font-weight: 650;
-    font-size: 1.05rem;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 14px;
+    color: var(--text);
   }
 
-  .group-icon {
-    width: 18px;
-    height: 18px;
-    color: var(--accent);
+  .field {
+    margin-bottom: 14px;
+  }
+  .field:last-child {
+    margin-bottom: 0;
   }
 
-  .control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .slider-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .slider-header {
+  .field-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin-bottom: 8px;
   }
 
-  .slider-label {
-    font-size: 0.88rem;
+  .field-label {
+    font-size: 0.85rem;
     color: var(--muted);
-    font-weight: 500;
   }
 
-  .slider-value {
-    font-size: 1.05rem;
-    font-weight: 650;
+  .value-badge {
+    font-size: 0.95rem;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
-    color: var(--text);
-    background: var(--bg);
-    border: 1px solid var(--line);
-    padding: 2px 10px;
-    border-radius: var(--radius-sm);
-    min-width: 72px;
-    text-align: right;
+    color: var(--accent);
   }
 
-  /* Slider Styling */
+  /* Schieberegler Styling */
   input[type=range] {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
-    height: 8px;
+    height: 6px;
+    background: var(--slider-track);
     border-radius: 999px;
-    background: var(--track-bg);
     outline: none;
     margin: 6px 0;
-    cursor: pointer;
-    touch-action: pan-y;
   }
 
-  input[type=range]:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-  }
-
-  /* WebKit Slider Thumb */
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: var(--accent);
-    border: 2px solid var(--card);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-  }
-
-  input[type=range]:active::-webkit-slider-thumb {
-    transform: scale(1.15);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  }
-
-  /* Firefox Slider Thumb */
-  input[type=range]::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--card);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
     transition: transform 0.1s ease;
   }
 
-  input[type=range]:active::-moz-range-thumb {
+  input[type=range]::-webkit-slider-thumb:active {
     transform: scale(1.15);
   }
 
-  /* Segmented Lüftungsarten */
+  input[type=range]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
+  }
+
+  /* Segment-Button / Lüftungsarten */
   .seg {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -230,406 +134,250 @@
   }
 
   .seg label {
-    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px 6px;
-    font-size: 0.85rem;
-    font-weight: 550;
-    color: var(--text);
-    background: var(--bg);
-    border: 1.5px solid var(--line);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    text-align: center;
     gap: 8px;
+    padding: 12px 6px;
+    background: #11151b;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: all 0.15s ease;
   }
 
-  .seg label:hover {
-    border-color: var(--accent);
-  }
-
-  .seg-icon {
-    width: 36px;
-    height: 36px;
+  .seg svg {
+    width: 28px;
+    height: 28px;
     stroke: currentColor;
-    stroke-width: 1.75;
     fill: none;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: transform 0.2s ease;
   }
 
   .seg input:checked + label {
     background: var(--accent);
     color: var(--accent-text);
     border-color: var(--accent);
-    box-shadow: 0 4px 12px rgba(47, 122, 91, 0.25);
-  }
-
-  .seg input:checked + label .seg-icon {
-    transform: scale(1.08);
+    font-weight: 600;
   }
 
   .seg input:focus-visible + label {
-    outline: 3px solid var(--accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
-  /* Status and Results */
-  .result-card {
-    border-left: 5px solid var(--accent);
-    transition: border-color 0.25s ease, background-color 0.25s ease;
-  }
-
-  .result-card.warn-mode {
-    border-left-color: var(--warn);
-  }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 999px;
+  /* Ergebnisbereich */
+  .status {
     font-weight: 650;
-    font-size: 0.9rem;
-    margin-bottom: 12px;
+    margin: 0;
+    font-size: 1.05rem;
+    text-align: center;
   }
-
-  .status-pill.good {
-    background: var(--good-bg);
-    color: var(--good);
-  }
-
-  .status-pill.warn {
-    background: var(--warn-bg);
-    color: var(--warn);
-  }
+  .status.good { color: var(--good); }
+  .status.warn { color: var(--warn); }
 
   .minutes {
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     font-weight: 300;
-    line-height: 1.05;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
+    text-align: center;
+    margin: 12px 0 6px;
     letter-spacing: -0.03em;
-    color: var(--text);
   }
-
   .minutes small {
     font-size: 1.25rem;
-    font-weight: 400;
     color: var(--muted);
-    margin-left: 8px;
-    letter-spacing: normal;
+    font-weight: 400;
+    margin-left: 6px;
   }
 
   .note {
     color: var(--muted);
-    font-size: 0.93rem;
-    margin: 12px 0 0;
+    font-size: 0.9rem;
+    margin: 8px 0 0;
     line-height: 1.45;
+    text-align: center;
   }
 
-  dl {
-    margin: 16px 0 0;
-    padding-top: 14px;
-    border-top: 1px dashed var(--line);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px 14px;
-    font-size: 0.92rem;
+  /* Einklappbare Details */
+  details.calc-details {
+    margin-top: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
   }
 
-  dt {
+  details.calc-details summary {
+    font-size: 0.85rem;
     color: var(--muted);
-  }
-
-  dd {
-    margin: 0;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    text-align: right;
-  }
-
-  /* Collapsible Footer */
-  .footer-details {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-top: 4px;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .footer-summary {
-    list-style: none;
     cursor: pointer;
     user-select: none;
-    padding: 13px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--muted);
-    transition: background 0.15s ease, color 0.15s ease;
+    outline: none;
+    text-align: center;
+    list-style: none;
+    transition: color 0.15s ease;
   }
 
-  .footer-summary::-webkit-details-marker {
+  details.calc-details summary::-webkit-details-marker {
     display: none;
   }
 
-  .footer-summary:hover {
-    color: var(--text);
-    background: var(--bg);
+  details.calc-details summary:hover {
+    color: var(--accent);
   }
 
-  .summary-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  details.calc-details summary::after {
+    content: " ▼";
+    font-size: 0.65rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
   }
 
-  .chevron {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.25s ease;
-  }
-
-  .footer-details[open] .chevron {
+  details.calc-details[open] summary::after {
     transform: rotate(180deg);
   }
 
-  .footer-content {
-    padding: 0 16px 14px 16px;
-    font-size: 0.83rem;
+  dl {
+    margin: 14px 0 4px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    font-size: 0.88rem;
+  }
+
+  dt { color: var(--muted); }
+  dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; color: var(--text); }
+
+  /* Einklappbare Fußzeile */
+  details.foot-details {
+    margin: 4px 4px 0;
+  }
+
+  details.foot-details summary {
+    font-size: 0.78rem;
     color: var(--muted);
-    line-height: 1.5;
-    border-top: 1px solid var(--line);
-    background: var(--card);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
   }
 
-  .footer-content p {
-    margin: 10px 0 0;
-  }
-
-  .footer-content ul {
-    margin: 6px 0 0;
-    padding-left: 18px;
-  }
-
-  .footer-content li {
-    margin-bottom: 4px;
+  .foot-content {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.45;
+    margin: 8px 0 0;
   }
 </style>
 </head>
 <body>
+  <h1>Lüftungsrechner</h1>
 
-  <header>
-    <h1>Lüftungsrechner</h1>
-    <span class="badge">Präzision & Feuchte</span>
-  </header>
-
-  <!-- Sektion Innenraum -->
+  <!-- Raum -->
   <section class="card">
-    <div class="card-header">
-      <h2 class="group-title">
-        <svg class="group-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 10.5L12 3l9 7.5v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-10z"/>
-        </svg>
-        Raum (Innen)
-      </h2>
+    <p class="group-title">Raum</p>
+    <div class="field">
+      <div class="field-header">
+        <span class="field-label">Temperatur</span>
+        <span class="value-badge" id="ti-val">21,0 °C</span>
+      </div>
+      <input id="ti" type="range" min="10" max="35" step="0.5" value="21">
     </div>
-
-    <div class="control-group">
-      <!-- Raumtemperatur -->
-      <div class="slider-item">
-        <div class="slider-header">
-          <label class="slider-label" for="ti">Temperatur</label>
-          <span class="slider-value" id="ti-val">21,0 °C</span>
-        </div>
-        <input id="ti" type="range" min="10" max="35" step="0.5" value="21">
+    <div class="field">
+      <div class="field-header">
+        <span class="field-label">Luftfeuchte</span>
+        <span class="value-badge" id="hi-val">60 %</span>
       </div>
-
-      <!-- Raumluftfeuchte -->
-      <div class="slider-item">
-        <div class="slider-header">
-          <label class="slider-label" for="hi">Relative Luftfeuchte</label>
-          <span class="slider-value" id="hi-val">60 %</span>
-        </div>
-        <input id="hi" type="range" min="0" max="100" step="1" value="60">
-      </div>
+      <input id="hi" type="range" min="0" max="100" step="1" value="60">
     </div>
   </section>
 
-  <!-- Sektion Außenbereich -->
+  <!-- Draußen -->
   <section class="card">
-    <div class="card-header">
-      <h2 class="group-title">
-        <svg class="group-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"/>
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-        </svg>
-        Draußen (Außen)
-      </h2>
+    <p class="group-title">Draußen</p>
+    <div class="field">
+      <div class="field-header">
+        <span class="field-label">Temperatur</span>
+        <span class="value-badge" id="to-val">5,0 °C</span>
+      </div>
+      <input id="to" type="range" min="-15" max="40" step="0.5" value="5">
     </div>
-
-    <div class="control-group">
-      <!-- Außentemperatur -->
-      <div class="slider-item">
-        <div class="slider-header">
-          <label class="slider-label" for="to">Temperatur</label>
-          <span class="slider-value" id="to-val">5,0 °C</span>
-        </div>
-        <input id="to" type="range" min="-15" max="40" step="0.5" value="5">
+    <div class="field">
+      <div class="field-header">
+        <span class="field-label">Luftfeuchte</span>
+        <span class="value-badge" id="ho-val">80 %</span>
       </div>
-
-      <!-- Außenluftfeuchte -->
-      <div class="slider-item">
-        <div class="slider-header">
-          <label class="slider-label" for="ho">Relative Luftfeuchte</label>
-          <span class="slider-value" id="ho-val">80 %</span>
-        </div>
-        <input id="ho" type="range" min="0" max="100" step="1" value="80">
-      </div>
+      <input id="ho" type="range" min="0" max="100" step="1" value="80">
     </div>
   </section>
 
-  <!-- Lüftungsart mit Piktogrammen -->
+  <!-- Lüftungsart -->
   <section class="card">
-    <div class="card-header">
-      <h2 class="group-title">
-        <svg class="group-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
-        </svg>
-        Lüftungsart
-      </h2>
-    </div>
-
+    <p class="group-title">Lüftungsart</p>
     <div class="seg" role="radiogroup" aria-label="Lüftungsart">
-      <!-- Stoßlüften: Einzelnes, weit geöffnetes Fenster mit Luftstrom -->
       <input type="radio" name="art" id="a1" value="1" checked>
       <label for="a1">
-        <svg class="seg-icon" viewBox="0 0 40 40">
-          <!-- Fensterrahmen -->
-          <rect x="5" y="7" width="30" height="26" rx="2"/>
-          <line x1="20" y1="7" x2="20" y2="33" stroke-dasharray="2 2" opacity="0.6"/>
-          <!-- Offener Fensterflügel in Perspektive -->
-          <polygon points="5,7 15,11 15,29 5,33" fill="currentColor" fill-opacity="0.12"/>
-          <!-- Luftstrom-Pfeil hinein -->
-          <path d="M32 14c-4 0-7 2.5-9 6-2 3.5-5 5-9 5" stroke-dasharray="1 1"/>
-          <path d="M22 17l-3 3 3 3"/>
-          <circle cx="29" cy="14" r="1.2" fill="currentColor"/>
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.5"></rect>
+          <path d="M12 3v18"></path>
+          <path d="M12 3l7 3v12l-7 3"></path>
+          <path d="M7 11c2 0 3 2 5 2" stroke-dasharray="2 2"></path>
         </svg>
         Stoßlüften
       </label>
 
-      <!-- Querlüften: Zwei gegenüberliegende Fenster mit Durchzug -->
       <input type="radio" name="art" id="a2" value="0.5">
       <label for="a2">
-        <svg class="seg-icon" viewBox="0 0 40 40">
-          <!-- Linkes Fenster geöffnet -->
-          <rect x="4" y="9" width="10" height="22" rx="1.5"/>
-          <line x1="4" y1="9" x2="1" y2="12"/>
-          <line x1="4" y1="31" x2="1" y2="28"/>
-          <!-- Rechtes Fenster geöffnet -->
-          <rect x="26" y="9" width="10" height="22" rx="1.5"/>
-          <line x1="36" y1="9" x2="39" y2="12"/>
-          <line x1="36" y1="31" x2="39" y2="28"/>
-          <!-- Durchzug / Querströmung -->
-          <path d="M8 20h21" stroke-width="2"/>
-          <polyline points="25,16 29.5,20 25,24" stroke-width="2"/>
-          <!-- Dynamische Windwirbel -->
-          <path d="M12 15c3-1 6-1 8 0"/>
-          <path d="M14 25c3 1 6 1 8 0"/>
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
+          <rect x="15" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
+          <path d="M6 12h12m-3-3l3 3-3 3"></path>
         </svg>
         Querlüften
       </label>
 
-      <!-- Kippen: Oben gekipptes Fenster -->
       <input type="radio" name="art" id="a3" value="5">
       <label for="a3">
-        <svg class="seg-icon" viewBox="0 0 40 40">
-          <!-- Fester Außenrahmen -->
-          <rect x="8" y="7" width="24" height="26" rx="2"/>
-          <!-- Oben gekippter Fensterflügel (Trapez/Neigung nach vorne) -->
-          <polygon points="11,12 29,12 32,33 8,33" fill="currentColor" fill-opacity="0.12"/>
-          <!-- Kipp-Spalt Linien oben/seitlich -->
-          <line x1="8" y1="7" x2="11" y2="12" stroke-width="1.5"/>
-          <line x1="32" y1="7" x2="29" y2="12" stroke-width="1.5"/>
-          <!-- Luftstrom oben durch den Spalt -->
-          <path d="M20 5c0 3-1 5-4 6"/>
-          <polyline points="18,10 16,11 17,13"/>
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="3" width="16" height="18" rx="2" stroke-width="1.5"></rect>
+          <path d="M4 19l4-14h8l4 14"></path>
+          <path d="M12 2v4m-2-2l2-2 2 2"></path>
         </svg>
-        Gekippt
+        Kippen
       </label>
     </div>
   </section>
 
-  <!-- Ergebnisbereich -->
-  <section class="card result-card" id="result-box" aria-live="polite">
-    <div class="status-pill good" id="status-pill">
-      <span id="status-icon">✓</span>
-      <span id="status">Berechne...</span>
-    </div>
-    <div class="minutes" id="minutes">ca. 0 <small>Minuten</small></div>
+  <!-- Ergebnis -->
+  <section class="card" aria-live="polite">
+    <p class="status" id="status"></p>
+    <div class="minutes" id="minutes"></div>
     <p class="note" id="note"></p>
-    <dl id="details"></dl>
+
+    <details class="calc-details">
+      <summary>Berechnungsdetails</summary>
+      <dl id="details"></dl>
+    </details>
   </section>
 
-  <!-- Einklappbare Hinweise & Methodik -->
-  <details class="footer-details">
-    <summary class="footer-summary">
-      <span class="summary-left">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="16" x2="12" y2="12"/>
-          <line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        Hinweise &amp; Berechnungsmethode
-      </span>
-      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </summary>
-    <div class="footer-content">
-      <p>
-        <strong>Physikalische Grundlage:</strong> Kalte Außenluft kann absolut betrachtet deutlich weniger Wasserdampf binden als warme Innenluft. 
-        Gerechnet wird mit der <em>Magnus-Formel</em> für den Sättigungsdampfdruck und der absoluten Feuchte in Gramm Wasser pro Kubikmeter Luft (g/m³).
-      </p>
-      <ul>
-        <li><strong>Querlüften (Durchzug):</strong> Schafft einen schnellen, vollständigen Luftaustausch innerhalb kürzester Zeit ohne nennenswertes Auskühlen der Wände.</li>
-        <li><strong>Stoßlüften:</strong> Vollständiges Öffnen des Fensterflügels bei geschlossenen Innentüren.</li>
-        <li><strong>Gekipptes Fenster:</strong> Sehr ineffizient; kühlt die Laibung stark aus (Schimmelgefahr an Wärmebrücken) und benötigt ein Vielfaches an Zeit für denselben Luftwechsel.</li>
-      </ul>
-      <p>
-        <em>Hinweis:</em> Die berechneten Minuten sind Richtwerte für ein typisches Wohn- oder Schlafzimmer. 
-        Starker Wind, Raumvolumen und Fenstermaße können die tatsächliche Zeit verkürzen oder verlängern.
-      </p>
-    </div>
+  <!-- Einklappbarer Footer -->
+  <details class="foot-details">
+    <summary>Hinweise zur Berechnung</summary>
+    <p class="foot-content">Richtwerte für ein typisches Zimmer. Wind, Raumgröße und Fenstergröße verändern die tatsächliche Dauer. Berechnet anhand der absoluten Luftfeuchte (Wassergehalt der Luft in g/m³ über die Magnus-Formel).</p>
   </details>
 
 <script>
-  // Stützpunkte für Lüftungsdauer (Temperaturdifferenz dT in Kelvin -> Minuten)
   var ANCHORS = [[0, 45], [2, 30], [5, 20], [7, 15], [10, 10], [15, 6], [20, 4], [25, 3]];
 
-  function num(id) { 
-    return parseFloat(document.getElementById(id).value); 
-  }
+  function num(id) { return parseFloat(document.getElementById(id).value); }
 
-  // Sättigungsdampfdruck in hPa (Magnus-Formel)
-  function sat(t) { 
-    return 6.112 * Math.exp(17.62 * t / (243.12 + t)); 
-  }
-
-  // Absolute Luftfeuchte in g/m³
-  function absHum(t, rh) { 
-    return 216.7 * (rh / 100 * sat(t)) / (273.15 + t); 
-  }
+  // Absolute Luftfeuchte in g/m³ (Magnus-Formel)
+  function sat(t) { return 6.112 * Math.exp(17.62 * t / (243.12 + t)); }
+  function absHum(t, rh) { return 216.7 * (rh / 100 * sat(t)) / (273.15 + t); }
 
   function baseMinutes(dT) {
     if (dT >= 25) return 3;
@@ -642,39 +390,21 @@
     return 3;
   }
 
-  function f1(x) { 
-    return x.toFixed(1).replace(".", ","); 
-  }
+  function f1(x) { return x.toFixed(1).replace(".", ","); }
 
-  function updateSliderDisplay() {
+  function render() {
     var ti = num("ti"), hi = num("hi"), to = num("to"), ho = num("ho");
+
+    // Werte über den Schiebereglern aktualisieren
     document.getElementById("ti-val").textContent = f1(ti) + " °C";
     document.getElementById("hi-val").textContent = Math.round(hi) + " %";
     document.getElementById("to-val").textContent = f1(to) + " °C";
     document.getElementById("ho-val").textContent = Math.round(ho) + " %";
-  }
 
-  function render() {
-    updateSliderDisplay();
-
-    var ti = num("ti"), hi = num("hi"), to = num("to"), ho = num("ho");
-    var resultBox = document.getElementById("result-box");
-    var statusPill = document.getElementById("status-pill");
-    var statusIcon = document.getElementById("status-icon");
     var st = document.getElementById("status");
     var mi = document.getElementById("minutes");
     var nt = document.getElementById("note");
     var dl = document.getElementById("details");
-
-    if ([ti, hi, to, ho].some(isNaN) || hi < 0 || hi > 100 || ho < 0 || ho > 100) {
-      statusPill.className = "status-pill warn";
-      statusIcon.textContent = "!";
-      st.textContent = "Eingabewerte prüfen";
-      mi.textContent = "–"; 
-      nt.textContent = "Luftfeuchte liegt zwischen 0 und 100 %."; 
-      dl.innerHTML = "";
-      return;
-    }
 
     var factor = parseFloat(document.querySelector("input[name=art]:checked").value);
     var dT = Math.abs(ti - to);
@@ -682,43 +412,29 @@
     mins = mins < 10 ? Math.round(mins) : Math.round(mins / (mins > 30 ? 5 : 1)) * (mins > 30 ? 5 : 1);
     if (mins < 2) mins = 2;
 
-    var aIn = absHum(ti, hi);
-    var aOut = absHum(to, ho);
-    
-    // Relative Feuchte der Außenluft nach Erwärmung/Abkühlung auf Raumtemperatur
+    var aIn = absHum(ti, hi), aOut = absHum(to, ho);
     var rhAfter = Math.min(100, (aOut * (273.15 + ti) / 216.7) / sat(ti) * 100);
     var diff = aIn - aOut;
 
     var notes = [];
     var good = diff > 0.3;
-
     if (good) {
       st.textContent = "Lüften lohnt sich";
-      statusIcon.textContent = "✓";
-      statusPill.className = "status-pill good";
-      resultBox.classList.remove("warn-mode");
-      notes.push("Die Außenluft ist absolut trockener als die Raumluft.");
+      notes.push("Die Außenluft ist trockener als die Raumluft.");
     } else {
       st.textContent = "Lüften entfeuchtet nicht";
-      statusIcon.textContent = "!";
-      statusPill.className = "status-pill warn";
-      resultBox.classList.add("warn-mode");
-      notes.push("Die Außenluft enthält gleich viel oder mehr Feuchtigkeit als die Raumluft. Für Frischluft (CO₂) dennoch nützlich, die Luftfeuchte sinkt jedoch nicht.");
+      notes.push("Die Außenluft enthält gleich viel oder mehr Wasser als die Raumluft. Es findet zwar ein Luftaustausch statt, die relative Feuchte sinkt jedoch nicht.");
     }
+    st.className = "status " + (good ? "good" : "warn");
 
-    if (to > ti) {
-      notes.push("Draußen ist es wärmer als drinnen: Lüften heizt den Raum auf. Im Sommer am besten frühmorgens oder nachts lüften.");
-    }
-    if (factor === 5) {
-      notes.push("Dauerhaftes Kippen kühlt Wände aus und fördert Schimmel an Laibungen. Stoß- oder Querlüften ist wesentlich effektiver.");
-    }
-    if (good && rhAfter > 65) {
-      notes.push("Nach dem Lüften bleibt die relative Feuchte voraussichtlich noch erhöht.");
-    }
+    if (to > ti) notes.push("Draußen ist es wärmer: Lüften heizt den Raum auf.");
+    if (factor === 5) notes.push("Gekippte Fenster kühlen Wände aus. Stoß- oder Querlüften ist deutlich wirksamer.");
 
-    mi.innerHTML = "ca. " + mins + " <small>Minuten</small>";
+    // Ausgabe der Zeit zentriert und ohne "ca."
+    mi.innerHTML = mins + "<small>Minuten</small>";
     nt.textContent = notes.join(" ");
 
+    // Berechnungsdetails
     dl.innerHTML =
       "<dt>Temperaturdifferenz (ΔT)</dt><dd>" + f1(dT) + " °C</dd>" +
       "<dt>Wassergehalt Raumluft</dt><dd>" + f1(aIn) + " g/m³</dd>" +
@@ -726,7 +442,6 @@
       "<dt>Erwartete Raumfeuchte nach Austausch</dt><dd>ca. " + Math.round(rhAfter) + " % rF</dd>";
   }
 
-  // Event-Listener für Live-Reaktivität
   document.addEventListener("input", render);
   render();
 </script>
