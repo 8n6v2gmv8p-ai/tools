@@ -18,28 +18,58 @@
     --slider-track: #202832;
     --good: #34d399;
     --warn: #fb923c;
+    --dry: #facc15;
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { background: var(--bg); }
   body {
     margin: 0 auto;
-    max-width: 480px;
+    max-width: 960px;
+    width: 100%;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
   }
 
   h1 {
-    font-size: 1.4rem;
-    margin: 4px 0 2px;
-    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 4px 0;
+    font-weight: 650;
     letter-spacing: -0.02em;
-    color: var(--text);
+  }
+
+  /* Responsive Layout (Single column mobile, two columns desktop) */
+  .app-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  @media (min-width: 768px) {
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .result-column {
+      position: sticky;
+      top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+  }
+
+  .inputs-column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .card {
@@ -47,6 +77,7 @@
     border: 1px solid var(--card-border);
     border-radius: 18px;
     padding: 16px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
   .group-title {
@@ -56,12 +87,8 @@
     color: var(--text);
   }
 
-  .field {
-    margin-bottom: 14px;
-  }
-  .field:last-child {
-    margin-bottom: 0;
-  }
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
 
   .field-header {
     display: flex;
@@ -70,11 +97,7 @@
     margin-bottom: 8px;
   }
 
-  .field-label {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
+  .field-label { font-size: 0.85rem; color: var(--muted); }
   .value-badge {
     font-size: 0.95rem;
     font-weight: 600;
@@ -82,7 +105,7 @@
     color: var(--accent);
   }
 
-  /* Schieberegler Styling */
+  /* Slider Styling */
   input[type=range] {
     -webkit-appearance: none;
     appearance: none;
@@ -93,7 +116,6 @@
     outline: none;
     margin: 6px 0;
   }
-
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -105,11 +127,7 @@
     box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
     transition: transform 0.1s ease;
   }
-
-  input[type=range]::-webkit-slider-thumb:active {
-    transform: scale(1.15);
-  }
-
+  input[type=range]::-webkit-slider-thumb:active { transform: scale(1.15); }
   input[type=range]::-moz-range-thumb {
     width: 22px;
     height: 22px;
@@ -120,19 +138,13 @@
     box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
   }
 
-  /* Segment-Button / Lüftungsarten */
+  /* Segment-Button / Lüftungsarten mit animierten SVGs */
   .seg {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
   }
-
-  .seg input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
   .seg label {
     display: flex;
     flex-direction: column;
@@ -146,12 +158,11 @@
     cursor: pointer;
     font-size: 0.85rem;
     color: var(--muted);
-    transition: all 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
   .seg svg {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.8;
@@ -159,59 +170,150 @@
     stroke-linejoin: round;
   }
 
+  /* SVG Animationen */
+  .wing-stoss { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 12px 12px; }
+  .seg input#a1:checked + label .wing-stoss { transform: rotateY(-35deg) scaleX(0.85); }
+
+  .wing-left { transition: transform 0.3s ease; transform-origin: 2px 12px; }
+  .wing-right { transition: transform 0.3s ease; transform-origin: 22px 12px; }
+  .seg input#a2:checked + label .wing-left { transform: rotateY(-40deg); }
+  .seg input#a2:checked + label .wing-right { transform: rotateY(40deg); }
+
+  .wing-kipp { transition: transform 0.3s ease; transform-origin: 12px 19px; }
+  .seg input#a3:checked + label .wing-kipp { transform: perspective(100px) rotateX(-20deg) scaleY(0.9); }
+
   .seg input:checked + label {
     background: var(--accent);
     color: var(--accent-text);
     border-color: var(--accent);
     font-weight: 600;
   }
+  .seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  .seg input:focus-visible + label {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+  /* Raumklima-Indikator */
+  .klima-box {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .klima-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  .klima-title { color: var(--muted); }
+  .klima-status { font-weight: 600; }
+
+  .klima-bar-bg {
+    height: 8px;
+    width: 100%;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--dry) 0%, var(--good) 40%, var(--good) 60%, var(--warn) 100%);
+    position: relative;
+  }
+  .klima-needle {
+    position: absolute;
+    top: -4px;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border: 3px solid var(--card);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    transition: left 0.3s ease-out;
   }
 
   /* Ergebnisbereich */
-  .status {
-    font-weight: 650;
-    margin: 0;
-    font-size: 1.05rem;
+  .result-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
+  .status { font-weight: 650; margin: 0; font-size: 1.05rem; }
   .status.good { color: var(--good); }
   .status.warn { color: var(--warn); }
 
-  .minutes {
-    font-size: 3.8rem;
-    font-weight: 300;
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-    text-align: center;
+  .timer-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
     margin: 12px 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .timer-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .timer-circle-bg { fill: none; stroke: var(--line); stroke-width: 6; }
+  .timer-circle-progress {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 6;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+  }
+
+  .minutes {
+    position: relative;
+    z-index: 1;
+    font-size: 3.2rem;
+    font-weight: 300;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
     letter-spacing: -0.03em;
   }
   .minutes small {
-    font-size: 1.25rem;
+    display: block;
+    font-size: 0.9rem;
     color: var(--muted);
     font-weight: 400;
-    margin-left: 6px;
+    margin-top: 2px;
+  }
+
+  .btn-timer {
+    background: var(--accent);
+    color: var(--accent-text);
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-timer:active { transform: scale(0.96); }
+  .btn-timer.active {
+    background: transparent;
+    color: var(--warn);
+    border: 1.5px solid var(--warn);
   }
 
   .note {
     color: var(--muted);
-    font-size: 0.9rem;
-    margin: 8px 0 0;
+    font-size: 0.88rem;
+    margin: 10px 0 0;
     line-height: 1.45;
-    text-align: center;
   }
 
   /* Einklappbare Details */
   details.calc-details {
-    margin-top: 16px;
+    width: 100%;
+    margin-top: 14px;
     border-top: 1px solid var(--line);
     padding-top: 12px;
   }
-
   details.calc-details summary {
     font-size: 0.85rem;
     color: var(--muted);
@@ -220,162 +322,161 @@
     outline: none;
     text-align: center;
     list-style: none;
-    transition: color 0.15s ease;
   }
-
-  details.calc-details summary::-webkit-details-marker {
-    display: none;
-  }
-
-  details.calc-details summary:hover {
-    color: var(--accent);
-  }
-
+  details.calc-details summary::-webkit-details-marker { display: none; }
   details.calc-details summary::after {
     content: " ▼";
     font-size: 0.65rem;
     display: inline-block;
     transition: transform 0.2s ease;
   }
-
-  details.calc-details[open] summary::after {
-    transform: rotate(180deg);
-  }
+  details.calc-details[open] summary::after { transform: rotate(180deg); }
 
   dl {
-    margin: 14px 0 4px;
+    margin: 12px 0 0;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 8px 12px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
+    text-align: left;
   }
-
   dt { color: var(--muted); }
   dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; color: var(--text); }
 
-  /* Einklappbare Fußzeile */
-  details.foot-details {
-    margin: 4px 4px 0;
-  }
-
-  details.foot-details summary {
-    font-size: 0.78rem;
-    color: var(--muted);
-    cursor: pointer;
-    user-select: none;
-    outline: none;
-  }
-
-  .foot-content {
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.45;
-    margin: 8px 0 0;
-  }
+  /* Footer Details */
+  details.foot-details { margin-top: 4px; }
+  details.foot-details summary { font-size: 0.78rem; color: var(--muted); cursor: pointer; }
+  .foot-content { font-size: 0.78rem; color: var(--muted); line-height: 1.45; margin: 8px 0 0; }
 </style>
 </head>
 <body>
+
   <h1>Lüftungsrechner</h1>
 
-  <!-- Raum -->
-  <section class="card">
-    <p class="group-title">Raum</p>
-    <div class="field">
-      <div class="field-header">
-        <span class="field-label">Temperatur</span>
-        <span class="value-badge" id="ti-val">21,0 °C</span>
-      </div>
-      <input id="ti" type="range" min="10" max="35" step="0.5" value="21">
+  <div class="app-layout">
+    <!-- Linke Spalte: Eingaben -->
+    <div class="inputs-column">
+      <!-- Raum -->
+      <section class="card">
+        <p class="group-title">Raum</p>
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label">Temperatur</span>
+            <span class="value-badge" id="ti-val">21,0 °C</span>
+          </div>
+          <input id="ti" type="range" min="10" max="35" step="0.5" value="21">
+        </div>
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label">Luftfeuchte</span>
+            <span class="value-badge" id="hi-val">60 %</span>
+          </div>
+          <input id="hi" type="range" min="0" max="100" step="1" value="60">
+        </div>
+
+        <!-- Raumklima Indikator -->
+        <div class="klima-box">
+          <div class="klima-header">
+            <span class="klima-title">Raumluftfeuchtigkeit</span>
+            <span class="klima-status" id="klima-status-text">Optimal</span>
+          </div>
+          <div class="klima-bar-bg">
+            <div class="klima-needle" id="klima-needle"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Draußen -->
+      <section class="card">
+        <p class="group-title">Draußen</p>
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label">Temperatur</span>
+            <span class="value-badge" id="to-val">5,0 °C</span>
+          </div>
+          <input id="to" type="range" min="-15" max="40" step="0.5" value="5">
+        </div>
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label">Luftfeuchte</span>
+            <span class="value-badge" id="ho-val">80 %</span>
+          </div>
+          <input id="ho" type="range" min="0" max="100" step="1" value="80">
+        </div>
+      </section>
+
+      <!-- Lüftungsart -->
+      <section class="card">
+        <p class="group-title">Lüftungsart</p>
+        <div class="seg" role="radiogroup" aria-label="Lüftungsart">
+          <input type="radio" name="art" id="a1" value="1" checked>
+          <label for="a1">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.5"></rect>
+              <path class="wing-stoss" d="M12 3l7 3v12l-7 3V3z"></path>
+              <path d="M12 3v18"></path>
+            </svg>
+            Stoßlüften
+          </label>
+
+          <input type="radio" name="art" id="a2" value="0.5">
+          <label for="a2">
+            <svg viewBox="0 0 24 24">
+              <rect class="wing-left" x="2" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
+              <rect class="wing-right" x="15" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
+              <path d="M6 12h12m-3-3l3 3-3 3"></path>
+            </svg>
+            Querlüften
+          </label>
+
+          <input type="radio" name="art" id="a3" value="5">
+          <label for="a3">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="3" width="16" height="18" rx="2" stroke-width="1.5"></rect>
+              <path class="wing-kipp" d="M4 19l4-14h8l4 14H4z"></path>
+            </svg>
+            Kippen
+          </label>
+        </div>
+      </section>
     </div>
-    <div class="field">
-      <div class="field-header">
-        <span class="field-label">Luftfeuchte</span>
-        <span class="value-badge" id="hi-val">60 %</span>
-      </div>
-      <input id="hi" type="range" min="0" max="100" step="1" value="60">
+
+    <!-- Rechte Spalte: Ergebnis & Timer -->
+    <div class="result-column">
+      <section class="card result-card" aria-live="polite">
+        <p class="status" id="status"></p>
+
+        <div class="timer-container">
+          <svg class="timer-svg" viewBox="0 0 130 130">
+            <circle class="timer-circle-bg" cx="65" cy="65" r="60"></circle>
+            <circle class="timer-circle-progress" id="timer-progress" cx="65" cy="65" r="60"></circle>
+          </svg>
+          <div class="minutes" id="minutes">--<small>Minuten</small></div>
+        </div>
+
+        <button class="btn-timer" id="btn-timer">Timer starten</button>
+        <p class="note" id="note"></p>
+
+        <details class="calc-details">
+          <summary>Berechnungsdetails</summary>
+          <dl id="details"></dl>
+        </details>
+      </section>
+
+      <details class="foot-details">
+        <summary>Hinweise zur Berechnung</summary>
+        <p class="foot-content">Richtwerte für ein typisches Zimmer. Wind, Raumgröße und Fenstergröße verändern die tatsächliche Dauer. Berechnet anhand der absoluten Luftfeuchte (Wassergehalt der Luft in g/m³ über die Magnus-Formel).</p>
+      </details>
     </div>
-  </section>
-
-  <!-- Draußen -->
-  <section class="card">
-    <p class="group-title">Draußen</p>
-    <div class="field">
-      <div class="field-header">
-        <span class="field-label">Temperatur</span>
-        <span class="value-badge" id="to-val">5,0 °C</span>
-      </div>
-      <input id="to" type="range" min="-15" max="40" step="0.5" value="5">
-    </div>
-    <div class="field">
-      <div class="field-header">
-        <span class="field-label">Luftfeuchte</span>
-        <span class="value-badge" id="ho-val">80 %</span>
-      </div>
-      <input id="ho" type="range" min="0" max="100" step="1" value="80">
-    </div>
-  </section>
-
-  <!-- Lüftungsart -->
-  <section class="card">
-    <p class="group-title">Lüftungsart</p>
-    <div class="seg" role="radiogroup" aria-label="Lüftungsart">
-      <input type="radio" name="art" id="a1" value="1" checked>
-      <label for="a1">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.5"></rect>
-          <path d="M12 3v18"></path>
-          <path d="M12 3l7 3v12l-7 3"></path>
-          <path d="M7 11c2 0 3 2 5 2" stroke-dasharray="2 2"></path>
-        </svg>
-        Stoßlüften
-      </label>
-
-      <input type="radio" name="art" id="a2" value="0.5">
-      <label for="a2">
-        <svg viewBox="0 0 24 24">
-          <rect x="2" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
-          <rect x="15" y="4" width="7" height="16" rx="1.5" stroke-width="1.5"></rect>
-          <path d="M6 12h12m-3-3l3 3-3 3"></path>
-        </svg>
-        Querlüften
-      </label>
-
-      <input type="radio" name="art" id="a3" value="5">
-      <label for="a3">
-        <svg viewBox="0 0 24 24">
-          <rect x="4" y="3" width="16" height="18" rx="2" stroke-width="1.5"></rect>
-          <path d="M4 19l4-14h8l4 14"></path>
-          <path d="M12 2v4m-2-2l2-2 2 2"></path>
-        </svg>
-        Kippen
-      </label>
-    </div>
-  </section>
-
-  <!-- Ergebnis -->
-  <section class="card" aria-live="polite">
-    <p class="status" id="status"></p>
-    <div class="minutes" id="minutes"></div>
-    <p class="note" id="note"></p>
-
-    <details class="calc-details">
-      <summary>Berechnungsdetails</summary>
-      <dl id="details"></dl>
-    </details>
-  </section>
-
-  <!-- Einklappbarer Footer -->
-  <details class="foot-details">
-    <summary>Hinweise zur Berechnung</summary>
-    <p class="foot-content">Richtwerte für ein typisches Zimmer. Wind, Raumgröße und Fenstergröße verändern die tatsächliche Dauer. Berechnet anhand der absoluten Luftfeuchte (Wassergehalt der Luft in g/m³ über die Magnus-Formel).</p>
-  </details>
+  </div>
 
 <script>
   var ANCHORS = [[0, 45], [2, 30], [5, 20], [7, 15], [10, 10], [15, 6], [20, 4], [25, 3]];
+  var timerInterval = null;
+  var timerRemainingSeconds = 0;
+  var timerTotalSeconds = 0;
 
   function num(id) { return parseFloat(document.getElementById(id).value); }
-
-  // Absolute Luftfeuchte in g/m³ (Magnus-Formel)
   function sat(t) { return 6.112 * Math.exp(17.62 * t / (243.12 + t)); }
   function absHum(t, rh) { return 216.7 * (rh / 100 * sat(t)) / (273.15 + t); }
 
@@ -392,14 +493,51 @@
 
   function f1(x) { return x.toFixed(1).replace(".", ","); }
 
+  // Synthetischer Signalton bei Timer-Ende
+  function playAlarm() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } catch(e){}
+  }
+
+  function updateKlima(hi) {
+    var needle = document.getElementById("klima-needle");
+    var statusText = document.getElementById("klima-status-text");
+
+    needle.style.left = Math.min(100, Math.max(0, hi)) + "%";
+
+    if (hi < 40) {
+      statusText.textContent = "Zu trocken";
+      statusText.style.color = "var(--dry)";
+    } else if (hi <= 60) {
+      statusText.textContent = "Optimales Klima";
+      statusText.style.color = "var(--good)";
+    } else {
+      statusText.textContent = "Zu feucht (Schimmelrisiko)";
+      statusText.style.color = "var(--warn)";
+    }
+  }
+
   function render() {
     var ti = num("ti"), hi = num("hi"), to = num("to"), ho = num("ho");
 
-    // Werte über den Schiebereglern aktualisieren
     document.getElementById("ti-val").textContent = f1(ti) + " °C";
     document.getElementById("hi-val").textContent = Math.round(hi) + " %";
     document.getElementById("to-val").textContent = f1(to) + " °C";
     document.getElementById("ho-val").textContent = Math.round(ho) + " %";
+
+    updateKlima(hi);
 
     var st = document.getElementById("status");
     var mi = document.getElementById("minutes");
@@ -423,24 +561,68 @@
       notes.push("Die Außenluft ist trockener als die Raumluft.");
     } else {
       st.textContent = "Lüften entfeuchtet nicht";
-      notes.push("Die Außenluft enthält gleich viel oder mehr Wasser als die Raumluft. Es findet zwar ein Luftaustausch statt, die relative Feuchte sinkt jedoch nicht.");
+      notes.push("Die Außenluft enthält gleich viel oder mehr Wasser als die Raumluft. Frische Luft bekommst du trotzdem, die Feuchte sinkt aber nicht.");
     }
     st.className = "status " + (good ? "good" : "warn");
 
     if (to > ti) notes.push("Draußen ist es wärmer: Lüften heizt den Raum auf.");
-    if (factor === 5) notes.push("Gekippte Fenster kühlen Wände aus. Stoß- oder Querlüften ist deutlich wirksamer.");
+    if (factor === 5) notes.push("Gekippte Fenster kühlen Wände aus. Stoß- oder Querlüften ist wirksamer.");
 
-    // Ausgabe der Zeit zentriert und ohne "ca."
-    mi.innerHTML = mins + "<small>Minuten</small>";
+    if (!timerInterval) {
+      mi.innerHTML = mins + "<small>Minuten</small>";
+      document.getElementById("timer-progress").style.strokeDashoffset = "0";
+      timerTotalSeconds = mins * 60;
+    }
+
     nt.textContent = notes.join(" ");
 
-    // Berechnungsdetails
     dl.innerHTML =
       "<dt>Temperaturdifferenz (ΔT)</dt><dd>" + f1(dT) + " °C</dd>" +
       "<dt>Wassergehalt Raumluft</dt><dd>" + f1(aIn) + " g/m³</dd>" +
       "<dt>Wassergehalt Außenluft</dt><dd>" + f1(aOut) + " g/m³</dd>" +
       "<dt>Erwartete Raumfeuchte nach Austausch</dt><dd>ca. " + Math.round(rhAfter) + " % rF</dd>";
   }
+
+  // Timer-Logik
+  document.getElementById("btn-timer").addEventListener("click", function() {
+    var btn = this;
+    var mi = document.getElementById("minutes");
+    var circle = document.getElementById("timer-progress");
+
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      btn.textContent = "Timer starten";
+      btn.classList.remove("active");
+      render();
+      return;
+    }
+
+    btn.textContent = "Timer stoppen";
+    btn.classList.add("active");
+
+    timerRemainingSeconds = timerTotalSeconds;
+
+    timerInterval = setInterval(function() {
+      timerRemainingSeconds--;
+      var m = Math.floor(timerRemainingSeconds / 60);
+      var s = timerRemainingSeconds % 60;
+      mi.innerHTML = m + ":" + (s < 10 ? "0" : "") + s + "<small>verbleibend</small>";
+
+      var progress = 377 * (1 - timerRemainingSeconds / timerTotalSeconds);
+      circle.style.strokeDashoffset = progress;
+
+      if (timerRemainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        playAlarm();
+        mi.innerHTML = "0:00<small>Fertig!</small>";
+        btn.textContent = "Timer neu starten";
+        btn.classList.remove("active");
+        alert("Lüften beendet! Bitte Fenster wieder schließen.");
+      }
+    }, 1000);
+  });
 
   document.addEventListener("input", render);
   render();
